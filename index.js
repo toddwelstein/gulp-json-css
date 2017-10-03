@@ -17,6 +17,7 @@ module.exports = function(opt) {
   opt = opt || {};
   opt.delim = opt.delim || '-';
   opt.eol = ';';
+  opt.format = opt.format || 'css';
   opt.ignoreJsonErrors = !!opt.ignoreJsonErrors;
   opt.escapeIllegalCharacters = opt.escapeIllegalCharacters === undefined ? true : opt.escapeIllegalCharacters;
   opt.firstCharacter = opt.firstCharacter || '_';
@@ -39,9 +40,9 @@ module.exports = function(opt) {
       var parsedJSON = JSON.parse(file.contents);
     } catch (e) {
       if (opt.ignoreJsonErrors) {
-        console.log(chalk.red('[gulp-json-sass]') + ' Invalid JSON in ' + file.path + '. (Continuing.)');
+        console.log(chalk.red('[gulp-json-css]') + ' Invalid JSON in ' + file.path + '. (Continuing.)');
       } else {
-        console.log(chalk.red('[gulp-json-sass]') + ' Invalid JSON in ' + file.path);
+        console.log(chalk.red('[gulp-json-css]') + ' Invalid JSON in ' + file.path);
         this.emit('error', e);
       }
       return;
@@ -54,15 +55,22 @@ module.exports = function(opt) {
       variables.push(assignmentString);
     });
 
-    var sass = variables.join('\n');
-    file.contents = Buffer(sass);
+    var styles = variables.join('\n');
 
-    file.path = gutil.replaceExtension(file.path, 'css);
+    if(opt.format.toLowerCase() === 'css') {
+      file.contents = Buffer('--root {\n' + styles + '\n}');
+          file.path = gutil.replaceExtension(file.path, '.css');
+    } else {
+      file.contents = Buffer(styles);
+          file.path = gutil.replaceExtension(file.path, '.scss');
+    }
 
     this.push(file);
   }
 
   function loadVariablesRecursive(obj, path, cb) {
+    var prefix = opt.format.toLowerCase() === 'css' ? '\t--' : '$';
+
     for (var key in obj) {
       if (obj.hasOwnProperty(key)) {
         var val = obj[key];
@@ -78,7 +86,7 @@ module.exports = function(opt) {
         }
 
         if (typeof val !== 'object') {
-          cb('--' + path + key + ': ' + val + opt.eol);
+          cb(prefix + path + key + ': ' + val + opt.eol);
         } else {
           loadVariablesRecursive(val, path + key + opt.delim, cb);
         }
