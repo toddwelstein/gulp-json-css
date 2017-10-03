@@ -1,42 +1,14 @@
-# Gulp-json-sass
+# Gulp-json-css
 
-> Gulp plugin for turning JSON files into files of scss/sass variable definitions.
+> Gulp plugin for turning JSON files into files of CSS native variable definitions.
 
-*Issues should be reported on the [issue tracker](https://github.com/rbalicki2/gulp-json-sass/issues).*
+*Issues should be reported on the [issue tracker](https://github.com/toddwelstein/gulp-json-css/issues).*
 
 This JSON file can also be read by your Javascript. This will make it easier to keep your JS code used for layout and your CSS code in sync.
 
 Supports all JSON objects, including nested objects, arrays and keys which are not legal key names (variable names that begin with a number will be prefixed; variable names containing illegal characters will have those characters escaped.)
 
 Ignores (passes through) files with a extensions other than `.json`.
-
-## Installation
-
-```sh
-npm install --save gulp-json-sass
-```
-
-## Example
-
-In this example gulpfile, a JSON file is turned into a file of sass variables, concatenated with a sass file, and compiled using `gulp-ruby-sass`.
-
-```js
-var jsonSass = require('gulp-json-sass'),
-    gulp = require('gulp'),
-    concat = require('gulp-concat'),
-    sass = require('gulp-ruby-sass');
-
-gulp.task('sass', function() {
-  return gulp
-    .src(['example.json', 'example.sass'])
-    .pipe(jsonSass({
-      sass: true
-    }))
-    .pipe(concat('output.sass'))
-    .pipe(sass())
-    .pipe(gulp.dest('out/'));
-});
-```
 
 ## API
 

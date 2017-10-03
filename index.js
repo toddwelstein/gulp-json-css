@@ -16,8 +16,7 @@ var firstCharacterIsNumber = /^[0-9]/;
 module.exports = function(opt) {
   opt = opt || {};
   opt.delim = opt.delim || '-';
-  opt.sass = !!opt.sass;
-  opt.eol = opt.sass ? '' : ';';
+  opt.eol = ';';
   opt.ignoreJsonErrors = !!opt.ignoreJsonErrors;
   opt.escapeIllegalCharacters = opt.escapeIllegalCharacters === undefined ? true : opt.escapeIllegalCharacters;
   opt.firstCharacter = opt.firstCharacter || '_';
@@ -49,16 +48,16 @@ module.exports = function(opt) {
     }
 
     // process the JSON
-    var sassVariables = [];
+    var variables = [];
 
     loadVariablesRecursive(parsedJSON, '', function pushVariable(assignmentString) {
-      sassVariables.push(assignmentString);
+      variables.push(assignmentString);
     });
 
-    var sass = sassVariables.join('\n');
+    var sass = variables.join('\n');
     file.contents = Buffer(sass);
 
-    file.path = gutil.replaceExtension(file.path, opt.sass ? '.sass' : '.scss');
+    file.path = gutil.replaceExtension(file.path, 'css);
 
     this.push(file);
   }
@@ -79,7 +78,7 @@ module.exports = function(opt) {
         }
 
         if (typeof val !== 'object') {
-          cb('$' + path + key + ': ' + val + opt.eol);
+          cb('--' + path + key + ': ' + val + opt.eol);
         } else {
           loadVariablesRecursive(val, path + key + opt.delim, cb);
         }
