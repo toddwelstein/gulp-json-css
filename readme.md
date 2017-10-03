@@ -12,7 +12,7 @@ Ignores (passes through) files with a extensions other than `.json`.
 
 ## API
 
-### jsonSass(options)
+### jsonCSS(options)
 
 Returns: `stream`
 
@@ -43,12 +43,13 @@ $someObject-someKey: 123;
 
 Note that keys can contain the delimiter. No attempt is made to ensure that variable names are unique.
 
-##### Sass
+##### Format
 
-Type: `boolean`  
-Default: `false`
+Type: `string`  
+Default: `css`
 
-If truthy, output valid sass variables. If false, output scss variables.
+Controls whether the output will be native CSS variables or SCSS.
+Can be "css" or "scss"
 
 ##### ignoreJsonErrors
 
