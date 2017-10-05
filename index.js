@@ -58,7 +58,7 @@ module.exports = function(opt) {
     var styles = variables.join('\n');
 
     if(opt.format.toLowerCase() === 'css') {
-      file.contents = Buffer('--root {\n' + styles + '\n}');
+      file.contents = Buffer(':root {\n' + styles + '\n}');
           file.path = gutil.replaceExtension(file.path, '.css');
     } else {
       file.contents = Buffer(styles);
